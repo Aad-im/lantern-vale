@@ -33,3 +33,8 @@ A small, cozy 3D exploration game in Three.js. Read DESIGN.md first: it defines 
 - Keep new interactions few and gentle (walk, look, E to interact).
 - When changing the look or sound, say what changed and why it fits DESIGN.md.
 - Do not add dependencies or a build tool without asking first. A Vite + TypeScript conversion is planned but not started.
+
+## Preview and sharing
+- Fast local loop: run `bash build.sh`, then open `dist/lantern-vale.html` in a browser (a static server such as `npx live-server dist` reloads it on each build).
+- The shareable playtest link is a published claude.ai artifact, updated from a claude.ai chat, not from this repo. Claude Code cannot publish it. When a change is ready to share, say so, and the user will take the built `dist/lantern-vale.html` (or the repo) to that chat.
+- Keep `dist/lantern-vale.html` a single self-contained file so it can be dropped into an artifact unchanged.
