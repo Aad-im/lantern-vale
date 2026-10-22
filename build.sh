@@ -2,6 +2,7 @@
 # Concatenates src/*.js (order matters: later files use earlier ones) into one self-contained page.
 set -e
 cd "$(dirname "$0")"
+mkdir -p dist
 ORDER="world nature props characters input-audio-camera story-loop"
 : > dist/all.js
 for f in $ORDER; do cat src/$f.js >> dist/all.js; echo >> dist/all.js; done
