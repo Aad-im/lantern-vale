@@ -1,0 +1,78 @@
+<title>Lantern Vale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: one framed stage holding the 3D world, with quiet overlays that fade in and out (objective top left, prompt and caption bottom centre, a paper letter, a closing card). One deliberate look: soft dusk plum, warm cream text, a sunrise-gold accent. */
+:root{--night:#15121d;--plum:#2a2236;--cream:#f6ead3;--ink:#3b2c24;--gold:#f2b866;--rose:#e89a8a;--moss:#8fb26a;--serif:'Fraunces',Georgia,serif;--sans:'Nunito','Trebuchet MS',sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--night);color:var(--cream);font-family:var(--sans);font-size:16px;padding-inline:16px;padding-block:12px;display:flex}
+#wrap{flex:1;min-height:0;min-width:0;max-width:1180px;margin:0 auto;width:100%;display:grid;grid-template-rows:1fr auto;gap:8px}
+#stage{position:relative;min-height:300px;overflow:hidden;background:#0c0a12;border-radius:6px}
+#view{position:absolute;inset:0;width:100%;height:100%;display:block;outline:none}
+#vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 58%,rgba(20,10,30,.38) 100%)}
+#obj{position:absolute;left:18px;top:16px;max-width:60%;font-family:var(--serif);font-style:italic;font-weight:300;font-size:17px;letter-spacing:.01em;color:var(--cream);text-shadow:0 1px 10px rgba(0,0,0,.55);opacity:0;transition:opacity 1.2s;pointer-events:none}
+#obj.on{opacity:.92}
+#obj::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold);margin-right:10px;box-shadow:0 0 10px var(--gold);vertical-align:middle}
+#prompt{position:absolute;left:50%;bottom:20%;transform:translateX(-50%);font-family:var(--serif);font-size:17px;color:var(--cream);text-shadow:0 1px 10px rgba(0,0,0,.7);opacity:0;transition:opacity .35s;white-space:nowrap;pointer-events:none}
+#prompt.on{opacity:1}
+#prompt b{display:inline-block;min-width:26px;text-align:center;font-family:var(--sans);font-weight:600;border:1px solid rgba(246,234,211,.7);border-radius:5px;padding:1px 7px;margin-right:10px;color:var(--gold)}
+#cap{position:absolute;left:0;right:0;bottom:0;padding:34px 24px 22px;text-align:center;font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(17px,2.4vw,22px);line-height:1.45;text-shadow:0 1px 12px rgba(0,0,0,.7);background:linear-gradient(transparent,rgba(16,10,26,.5));opacity:0;transition:opacity 1.1s;pointer-events:none}
+#cap.on{opacity:1}
+#letter{position:absolute;inset:0;display:grid;place-content:center;padding:16px;background:rgba(16,10,26,.55)}
+#letter[hidden],#endcard[hidden],#intro[hidden]{display:none}
+.paper{max-width:min(470px,92vw);background:linear-gradient(#f3e5c4,#ecd9b2);color:var(--ink);padding:28px 32px 24px;border-radius:4px;box-shadow:0 20px 60px rgba(0,0,0,.55),inset 0 0 40px rgba(150,100,50,.18);font-family:var(--serif);font-style:italic;font-weight:400;font-size:17px;line-height:1.6;transform:rotate(-.6deg)}
+.paper p{margin:0 0 .8em}
+.paper .sig{text-align:right;margin:0}
+.paper .close{margin-top:16px;text-align:center;font-family:var(--sans);font-style:normal;font-size:13px;color:#7a5f48;letter-spacing:.06em}
+#endcard{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:10px;text-align:center;padding:16px;background:radial-gradient(ellipse at center,rgba(20,12,28,.62),rgba(20,12,28,.3));opacity:0;transition:opacity 2s}
+#endcard.on{opacity:1}
+#endcard small{font-family:var(--sans);letter-spacing:.3em;text-transform:uppercase;font-size:12px;color:var(--gold)}
+#endcard h2{margin:0;font-family:var(--serif);font-weight:300;font-style:italic;font-size:clamp(30px,6vw,54px)}
+#endcard p{margin:0 0 8px;color:#d9ccd8;max-width:36ch}
+#intro{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:14px;text-align:center;padding:16px;background:radial-gradient(ellipse at center,rgba(18,12,30,.74),rgba(18,12,30,.5) 70%,rgba(18,12,30,.3))}
+#intro h1{margin:0;font-family:var(--serif);font-weight:300;font-style:italic;font-size:clamp(38px,8vw,76px);letter-spacing:.01em;color:var(--cream)}
+#intro .lede{margin:0;max-width:38ch;color:#e0d2d6;font-family:var(--serif);font-style:italic;font-weight:300;font-size:18px}
+.keys{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 22px;margin:4px 0 0;font-size:14px;color:#cdbfd0}
+.keys b{color:var(--gold);font-weight:600;margin-right:6px}
+.btn{font-family:var(--serif);font-size:17px;color:var(--cream);background:rgba(246,234,211,.08);border:1px solid rgba(246,234,211,.55);border-radius:999px;padding:10px 30px;cursor:pointer;letter-spacing:.03em}
+.btn:hover{background:rgba(242,184,102,.2);border-color:var(--gold)}
+.btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.note{margin:0;color:#a99bb0;font-size:13px}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 16px;color:#9d8fa8;font-size:13px}
+.foot .btn{font-family:var(--sans);font-size:12px;padding:3px 14px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<main id="wrap">
+  <div id="stage">
+    <canvas id="view" tabindex="0" aria-label="Game view"></canvas>
+    <div id="vig"></div>
+    <div id="obj"><span id="objtxt"></span></div>
+    <div id="prompt"></div>
+    <div id="cap"></div>
+    <div id="letter" hidden><div class="paper">
+      <p>Dear one,</p>
+      <p>By the time you read this the sun will be climbing out of the sea, and I will be at the lighthouse, as promised.</p>
+      <p>Three old lamps keep the vale asleep. Wake them with your lantern and the morning will follow you down.</p>
+      <p>Mind the little fox. He knows the way, even when he pretends not to.</p>
+      <p class="sig">Grandmother Wren</p>
+      <div class="close">press E to fold it away</div>
+    </div></div>
+    <div id="endcard" hidden>
+      <small>Chapter one</small>
+      <h2>The Vale Wakes</h2>
+      <p>Somewhere past the horizon, the road goes on. To be continued.</p>
+      <button class="btn" id="keep">Keep wandering</button>
+    </div>
+    <div id="intro">
+      <h1>Lantern Vale</h1>
+      <p class="lede">A cold fire, a note, and a long walk down to the sea.</p>
+      <div class="keys"><span><b>W A S D</b>walk</span><span><b>Shift</b>stroll faster</span><span><b>Mouse</b>look</span><span><b>E</b>interact</span></div>
+      <button class="btn" id="begin">Wake up</button>
+      <p class="note">Headphones recommended. Click and drag to look if the mouse will not lock.</p>
+    </div>
+  </div>
+  <div class="foot"><span>No hurry. Nothing here wants to hurt you.</span><button class="btn" id="snd">Sound: on</button></div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
